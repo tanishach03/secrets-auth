@@ -1,4 +1,4 @@
-//jshint esver
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose= require("mongoose");
@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
-
+  
 mongoose.set('strictQuery', true);
 mongoose.connect("mongodb+srv://admin-tanisha:Tanisha@cluster0.nha7vaw.mongodb.net/userDB", {useNewUrlParser: true});
 
@@ -20,8 +20,7 @@ const userSchema = new mongoose.Schema({
     password: String
 });
 
-const secret = "Thisisourlittlesecret.";
-userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password']});
+userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ['password']});
 
 const User = new mongoose.model("User", userSchema);
 
